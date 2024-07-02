@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { FaUpload, FaSpinner } from 'react-icons/fa';
-import NSFWJS from 'nsfwjs';
+import * as nsfwjs from 'nsfwjs';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -16,7 +16,7 @@ const Index = () => {
     setLoading(true);
     setError(null);
     try {
-      const model = await NSFWJS.load();
+      const model = await nsfwjs.load();
       const results = await Promise.all(
         photos.map(async (photo) => {
           const img = new Image();
