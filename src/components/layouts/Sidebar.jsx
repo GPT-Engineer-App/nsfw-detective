@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaShieldAlt } from 'react-icons/fa';
+import { FaGoogle } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Sidebar = ({ children }) => {
@@ -7,8 +7,8 @@ const Sidebar = ({ children }) => {
     <div className="flex">
       <aside className="w-64 bg-gray-800 text-white min-h-screen">
         <div className="p-4 flex items-center">
-          <FaShieldAlt className="text-3xl mr-2" />
-          <span className="text-2xl font-bold">NSFW Detection Tool</span>
+          <FaGoogle className="text-3xl mr-2" />
+          <span className="text-2xl font-bold">Google Photos NSFW Detection</span>
         </div>
         <nav className="mt-4">
           <ul>
@@ -19,7 +19,7 @@ const Sidebar = ({ children }) => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-4 bg-gray-100">
+      <main className="flex-1 p-4 bg-gray-50">
         {children}
       </main>
     </div>
