@@ -51,9 +51,38 @@ const Index = () => {
     }
   };
 
-  const handleLoginSuccess = (response) => {
+  const exchangeAuthorizationCode = async (code) => {
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        code,
+        client_id: '329036519915-nhnl3ujtpp584uhmsvuqifu20076sqsa.apps.googleusercontent.com',
+        client_secret: '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',
+        redirect_uri: 'http://localhost:8000/oauth2callback',
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    if (!response.ok) {
+      throw new Error('Failed to exchange authorization code');
+    }
+
+    return response.json();
+  };
+
+  const handleLoginSuccess = async (response) => {
     console.log('Login Success:', response);
-    setIsLoggedIn(true);
+    try {
+      const tokens = await exchangeAuthorizationCode(response.code);
+      console.log('Tokens:', tokens);
+      setIsLoggedIn(true);
+    } catch (error) {
+      console.error('Error exchanging authorization code:', error);
+      setError('Failed to exchange authorization code.');
+    }
   };
 
   const handleLoginFailure = (response) => {
@@ -72,6 +101,8 @@ const Index = () => {
             <GoogleLogin
               onSuccess={handleLoginSuccess}
               onFailure={handleLoginFailure}
+              flow="auth-code"
+              scope="https://www.googleapis.com/auth/photoslibrary.readonly"
             />
           ) : (
             <>
