@@ -91,7 +91,7 @@ const Index = () => {
   };
 
   return (
-    <GoogleOAuthProvider clientId="YOUR_GOOGLE_CLIENT_ID">
+    <GoogleOAuthProvider clientId="329036519915-nhnl3ujtpp584uhmsvuqifu20076sqsa.apps.googleusercontent.com">
       <div className="container mx-auto p-4">
         <header className="text-center mb-8">
           <h1 className="text-4xl font-bold">NSFW Detection Tool</h1>
@@ -103,6 +103,7 @@ const Index = () => {
               onFailure={handleLoginFailure}
               flow="auth-code"
               scope="https://www.googleapis.com/auth/photoslibrary.readonly"
+              redirect_uri="http://localhost:8000/oauth2callback"
             />
           ) : (
             <>
