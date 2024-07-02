@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaGoogle } from 'react-icons/fa';
+import { FaPhotoVideo } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Sidebar = ({ children }) => {
@@ -7,8 +7,8 @@ const Sidebar = ({ children }) => {
     <div className="flex">
       <aside className="w-64 bg-gray-800 text-white min-h-screen">
         <div className="p-4 flex items-center">
-          <FaGoogle className="text-3xl mr-2" />
-          <span className="text-2xl font-bold">Google Photos NSFW Detection</span>
+          <FaPhotoVideo className="text-3xl mr-2" />
+          <span className="text-2xl font-bold">Photo Analyzer</span>
         </div>
         <nav className="mt-4">
           <ul>
@@ -22,7 +22,7 @@ const Sidebar = ({ children }) => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-4 bg-gray-50">
+      <main className="flex-1 p-8 bg-gray-100">
         {children}
       </main>
     </div>
