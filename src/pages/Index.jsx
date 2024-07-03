@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { FaUpload, FaSpinner } from 'react-icons/fa';
-import * as nsfwjs from 'nsfwjs';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
 import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
+import { ImageAnnotatorClient } from '@google-cloud/vision';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -39,14 +39,12 @@ const Index = () => {
     setLoading(true);
     setError(null);
     try {
-      const model = await nsfwjs.load();
+      const client = new ImageAnnotatorClient();
       const results = await Promise.all(
         photos.map(async (photo) => {
-          const img = new Image();
-          img.src = URL.createObjectURL(photo);
-          await img.decode();
-          const predictions = await model.classify(img);
-          return { photo, predictions };
+          const [result] = await client.safeSearchDetection(photo);
+          const detections = result.safeSearchAnnotation;
+          return { photo, detections };
         })
       );
       setResults(results);
@@ -171,16 +169,16 @@ const Index = () => {
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {results.map(({ photo, video, predictions, explicitContentResults }, index) => (
+            {results.map(({ photo, video, detections, explicitContentResults }, index) => (
               <div key={index} className="border p-2 rounded">
                 {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
                 {video && <video src={URL.createObjectURL(video)} controls className="w-full h-auto mb-2" />}
                 <div>
-                  {predictions && predictions.map((prediction, i) => (
-                    <div key={i} className={`text-sm ${prediction.className === 'NSFW' ? 'text-red-500' : 'text-green-500'}`}>
-                      {prediction.className}: {(prediction.probability * 100).toFixed(2)}%
+                  {detections && (
+                    <div className={`text-sm ${detections.adult >= 3 ? 'text-red-500' : 'text-green-500'}`}>
+                      Adult: {detections.adult}
                     </div>
-                  ))}
+                  )}
                   {explicitContentResults && explicitContentResults.frames.map((frame, i) => (
                     <div key={i} className={`text-sm ${frame.pornographyLikelihood >= 3 ? 'text-red-500' : 'text-green-500'}`}>
                       Frame {i + 1}: {frame.pornographyLikelihood}
