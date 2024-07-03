@@ -2,6 +2,35 @@ import React, { useState, useEffect } from 'react';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { FaSpinner } from 'react-icons/fa';
 
+const exchangeAuthorizationCode = async (code) => {
+  try {
+    const response = await fetch('https://oauth2.googleapis.com/token', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+      body: new URLSearchParams({
+        code,
+        client_id: '329036519915-nhnl3ujtpp584uhmsvuqifu20076sqsa.apps.googleusercontent.com',
+        client_secret: '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',
+        redirect_uri: 'http://localhost:5173/oauth2callback',
+        grant_type: 'authorization_code',
+      }),
+    });
+
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error('Error exchanging authorization code:', errorData);
+      throw new Error('Failed to exchange authorization code');
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error('Error in exchangeAuthorizationCode:', error);
+    throw error;
+  }
+};
+
 const GoogleDrive = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
