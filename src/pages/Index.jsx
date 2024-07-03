@@ -3,9 +3,11 @@ import { FaUpload, FaSpinner } from 'react-icons/fa';
 import * as nsfwjs from 'nsfwjs';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
+import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
+  const [videos, setVideos] = useState([]);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -13,6 +15,10 @@ const Index = () => {
 
   const handleFileChange = (event) => {
     setPhotos(Array.from(event.target.files));
+  };
+
+  const handleVideoChange = (event) => {
+    setVideos(Array.from(event.target.files));
   };
 
   const handleDirectoryUpload = async () => {
@@ -46,6 +52,30 @@ const Index = () => {
       setResults(results);
     } catch (err) {
       setError('An error occurred during the analysis.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const analyzeVideos = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const client = new VideoIntelligenceServiceClient();
+      const results = await Promise.all(
+        videos.map(async (video) => {
+          const [operation] = await client.annotateVideo({
+            inputUri: URL.createObjectURL(video),
+            features: ['EXPLICIT_CONTENT_DETECTION'],
+          });
+          const [operationResult] = await operation.promise();
+          const explicitContentResults = operationResult.annotationResults[0].explicitAnnotation;
+          return { video, explicitContentResults };
+        })
+      );
+      setResults(results);
+    } catch (err) {
+      setError('An error occurred during the video analysis.');
     } finally {
       setLoading(false);
     }
@@ -122,26 +152,38 @@ const Index = () => {
               <button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
                 Upload Directory
               </button>
+              <label className="block mb-2 text-lg font-medium mt-4">Upload your Google Videos library:</label>
+              <input type="file" multiple accept="video/*" onChange={handleVideoChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
             </>
           )}
         </section>
         <section className="mb-8">
           <button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
             {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
-            Analyze
+            Analyze Photos
+          </button>
+          <button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4">
+            {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
+            Analyze Videos
           </button>
         </section>
         {error && <div className="text-red-500 mb-4">{error}</div>}
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {results.map(({ photo, predictions }, index) => (
+            {results.map(({ photo, video, predictions, explicitContentResults }, index) => (
               <div key={index} className="border p-2 rounded">
-                <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />
+                {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
+                {video && <video src={URL.createObjectURL(video)} controls className="w-full h-auto mb-2" />}
                 <div>
-                  {predictions.map((prediction, i) => (
+                  {predictions && predictions.map((prediction, i) => (
                     <div key={i} className={`text-sm ${prediction.className === 'NSFW' ? 'text-red-500' : 'text-green-500'}`}>
                       {prediction.className}: {(prediction.probability * 100).toFixed(2)}%
+                    </div>
+                  ))}
+                  {explicitContentResults && explicitContentResults.frames.map((frame, i) => (
+                    <div key={i} className={`text-sm ${frame.pornographyLikelihood >= 3 ? 'text-red-500' : 'text-green-500'}`}>
+                      Frame {i + 1}: {frame.pornographyLikelihood}
                     </div>
                   ))}
                 </div>
@@ -150,7 +192,7 @@ const Index = () => {
           </div>
         </section>
         <footer className="mt-8 text-center text-sm text-gray-500">
-          <p>All analysis is done locally. No photos are uploaded to any server.</p>
+          <p>All analysis is done locally. No photos or videos are uploaded to any server.</p>
         </footer>
       </div>
     </GoogleOAuthProvider>
