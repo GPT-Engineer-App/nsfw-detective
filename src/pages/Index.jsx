@@ -101,7 +101,9 @@ const Index = () => {
         throw new Error('Failed to exchange authorization code');
       }
 
-      return response.json();
+      const tokens = await response.json();
+      console.log('Tokens:', tokens);
+      return tokens;
     } catch (error) {
       console.error('Error in exchangeAuthorizationCode:', error);
       throw error;
@@ -141,7 +143,7 @@ const Index = () => {
               onFailure={handleLoginFailure}
               flow="auth-code"
               scope="https://www.googleapis.com/auth/photoslibrary.readonly"
-              redirect_uri="http://localhost:8000/oauth2callback"
+              redirect_uri="http://localhost:5173/oauth2callback"
             />
           ) : (
             <>
