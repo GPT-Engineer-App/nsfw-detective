@@ -1,5 +1,5 @@
 import React from 'react';
-import { FaCameraRetro } from 'react-icons/fa';
+import { FaPhotoVideo } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Sidebar = ({ children }) => {
@@ -7,8 +7,8 @@ const Sidebar = ({ children }) => {
     <div className="flex">
       <aside className="w-64 bg-gray-900 text-white min-h-screen">
         <div className="p-4 flex items-center">
-          <FaCameraRetro className="text-3xl mr-2" />
-          <span className="text-2xl font-bold">Modern NSFW Detection Tool</span>
+          <FaPhotoVideo className="text-3xl mr-2" />
+          <span className="text-2xl font-bold">Photo & Video Analyzer</span>
         </div>
         <nav className="mt-4">
           <ul>
@@ -27,7 +27,7 @@ const Sidebar = ({ children }) => {
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-8 bg-gradient-to-r from-gray-50 to-gray-200">
+      <main className="flex-1 p-8 bg-gradient-to-r from-blue-50 to-blue-200">
         {children}
       </main>
     </div>
