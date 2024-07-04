@@ -4,6 +4,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
 import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { Tooltip } from 'react-tooltip';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -148,21 +149,21 @@ const Index = () => {
           ) : (
             <>
               <label className="block mb-2 text-lg font-medium">Upload your Google Photos library:</label>
-              <input type="file" multiple accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-              <button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+              <input type="file" multiple accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out" />
+              <button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4 transition duration-300 ease-in-out">
                 Upload Directory
               </button>
               <label className="block mb-2 text-lg font-medium mt-4">Upload your Google Videos library:</label>
-              <input type="file" multiple accept="video/*" onChange={handleVideoChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
+              <input type="file" multiple accept="video/*" onChange={handleVideoChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100 transition duration-300 ease-in-out" />
             </>
           )}
         </section>
         <section className="mb-8">
-          <button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
+          <button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center transition duration-300 ease-in-out">
             {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
             Analyze Photos
           </button>
-          <button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4">
+          <button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4 transition duration-300 ease-in-out">
             {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
             Analyze Videos
           </button>
@@ -172,7 +173,7 @@ const Index = () => {
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
             {results.map(({ photo, video, detections, explicitContentResults }, index) => (
-              <div key={index} className="border p-2 rounded">
+              <div key={index} className="border p-2 rounded transition duration-300 ease-in-out hover:shadow-lg">
                 {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
                 {video && <video src={URL.createObjectURL(video)} controls className="w-full h-auto mb-2" />}
                 <div>
@@ -194,6 +195,7 @@ const Index = () => {
         <footer className="mt-8 text-center text-sm text-gray-200">
           <p>All analysis is done locally. No photos or videos are uploaded to any server.</p>
         </footer>
+        <Tooltip place="top" type="dark" effect="solid" />
       </div>
     </GoogleOAuthProvider>
   );

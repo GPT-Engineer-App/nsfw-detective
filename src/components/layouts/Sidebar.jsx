@@ -1,6 +1,7 @@
 import React from 'react';
 import { FaCameraRetro } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { Tooltip } from 'react-tooltip';
 
 const Sidebar = ({ children }) => {
   return (
@@ -12,24 +13,25 @@ const Sidebar = ({ children }) => {
         </div>
         <nav className="mt-4">
           <ul>
-            <li className="p-4 hover:bg-gray-700">
-              <Link to="/">Home</Link>
+            <li className="p-4 hover:bg-gray-700 transition duration-300 ease-in-out">
+              <Link to="/" data-tip="Home">Home</Link>
             </li>
-            <li className="p-4 hover:bg-gray-700">
-              <Link to="/google-photos">Google Photos</Link>
+            <li className="p-4 hover:bg-gray-700 transition duration-300 ease-in-out">
+              <Link to="/google-photos" data-tip="Google Photos">Google Photos</Link>
             </li>
-            <li className="p-4 hover:bg-gray-700">
-              <Link to="/google-drive">Google Drive Library</Link>
+            <li className="p-4 hover:bg-gray-700 transition duration-300 ease-in-out">
+              <Link to="/google-drive" data-tip="Google Drive Library">Google Drive Library</Link>
             </li>
-            <li className="p-4 hover:bg-gray-700">
-              <Link to="/mobile-photos">Mobile Photos</Link> {/* New Tab */}
+            <li className="p-4 hover:bg-gray-700 transition duration-300 ease-in-out">
+              <Link to="/mobile-photos" data-tip="Mobile Photos">Mobile Photos</Link>
             </li>
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-8 bg-gradient-to-r from-gray-50 to-gray-200">
+      <main className="flex-1 p-8 bg-gradient-to-r from-gray-50 to-gray-200 transition duration-300 ease-in-out">
         {children}
       </main>
+      <Tooltip place="right" type="dark" effect="solid" />
     </div>
   );
 };
