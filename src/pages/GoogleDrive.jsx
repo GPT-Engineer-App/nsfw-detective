@@ -16,7 +16,7 @@ const exchangeAuthorizationCode = async (code) => {
         redirect_uri: 'http://localhost:5173/oauth2callback',
         grant_type: 'authorization_code',
       }),
-      mode: 'no-cors',
+      
     });
 
     if (!response.ok) {
@@ -25,7 +25,8 @@ const exchangeAuthorizationCode = async (code) => {
       throw new Error('Failed to exchange authorization code');
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Error in exchangeAuthorizationCode:', error);
     throw error;

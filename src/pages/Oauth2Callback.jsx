@@ -23,7 +23,8 @@ const exchangeAuthorizationCode = async (code) => {
       throw new Error('Failed to exchange authorization code');
     }
 
-    return response.json();
+    const data = await response.json();
+    return data;
   } catch (error) {
     console.error('Error in exchangeAuthorizationCode:', error);
     throw error;
