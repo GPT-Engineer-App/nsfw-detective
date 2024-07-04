@@ -8,7 +8,7 @@ const Sidebar = ({ children }) => {
       <aside className="w-64 bg-gray-900 text-white min-h-screen">
         <div className="p-4 flex items-center">
           <FaCameraRetro className="text-3xl mr-2" />
-          <span className="text-2xl font-bold">Photo & Video Analyzer</span>
+          <span className="text-2xl font-bold">Modern NSFW Detection Tool</span>
         </div>
         <nav className="mt-4">
           <ul>
@@ -22,7 +22,7 @@ const Sidebar = ({ children }) => {
               <Link to="/google-drive">Google Drive Library</Link>
             </li>
             <li className="p-4 hover:bg-gray-700">
-              <Link to="/mobile-photos">Mobile Photos</Link> {/* New Tab */}
+              <Link to="/mobile-photos">Mobile Photos</Link>
             </li>
           </ul>
         </nav>
