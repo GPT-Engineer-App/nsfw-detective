@@ -4,6 +4,7 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
 import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
+import { Tooltip, Button, Spinner, Alert } from '@shadcn/ui';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -149,25 +150,31 @@ const Index = () => {
             <>
               <label className="block mb-2 text-lg font-medium">Upload your Google Photos library:</label>
               <input type="file" multiple accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-              <button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
-                Upload Directory
-              </button>
+              <Tooltip content="Upload a directory of photos">
+                <Button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+                  Upload Directory
+                </Button>
+              </Tooltip>
               <label className="block mb-2 text-lg font-medium mt-4">Upload your Google Videos library:</label>
               <input type="file" multiple accept="video/*" onChange={handleVideoChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
             </>
           )}
         </section>
         <section className="mb-8">
-          <button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
-            {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
-            Analyze Photos
-          </button>
-          <button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4">
-            {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
-            Analyze Videos
-          </button>
+          <Tooltip content="Analyze uploaded photos">
+            <Button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
+              {loading ? <Spinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
+              Analyze Photos
+            </Button>
+          </Tooltip>
+          <Tooltip content="Analyze uploaded videos">
+            <Button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4">
+              {loading ? <Spinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
+              Analyze Videos
+            </Button>
+          </Tooltip>
         </section>
-        {error && <div className="text-red-500 mb-4">{error}</div>}
+        {error && <Alert type="error" className="mb-4">{error}</Alert>}
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
