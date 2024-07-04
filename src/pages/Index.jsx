@@ -132,9 +132,9 @@ const Index = () => {
 
   return (
     <GoogleOAuthProvider clientId="329036519915-nhnl3ujtpp584uhmsvuqifu20076sqsa.apps.googleusercontent.com">
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 bg-gradient-to-r from-purple-400 via-pink-500 to-red-500 min-h-screen text-white">
         <header className="text-center mb-8">
-          <h1 className="text-4xl font-bold">NSFW Detection Tool</h1>
+          <h1 className="text-4xl font-bold">Modern NSFW Detection Tool</h1>
         </header>
         <section className="mb-8">
           {!isLoggedIn ? (
@@ -191,7 +191,7 @@ const Index = () => {
             ))}
           </div>
         </section>
-        <footer className="mt-8 text-center text-sm text-gray-500">
+        <footer className="mt-8 text-center text-sm text-gray-200">
           <p>All analysis is done locally. No photos or videos are uploaded to any server.</p>
         </footer>
       </div>

@@ -1,14 +1,14 @@
 import React from 'react';
-import { FaShieldAlt } from 'react-icons/fa';
+import { FaCameraRetro } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 
 const Sidebar = ({ children }) => {
   return (
     <div className="flex">
-      <aside className="w-64 bg-gray-800 text-white min-h-screen">
+      <aside className="w-64 bg-gray-900 text-white min-h-screen">
         <div className="p-4 flex items-center">
-          <FaShieldAlt className="text-3xl mr-2" />
-          <span className="text-2xl font-bold">NSFW Detection Tool</span>
+          <FaCameraRetro className="text-3xl mr-2" />
+          <span className="text-2xl font-bold">Photo & Video Analyzer</span>
         </div>
         <nav className="mt-4">
           <ul>
@@ -19,13 +19,12 @@ const Sidebar = ({ children }) => {
               <Link to="/google-photos">Google Photos</Link>
             </li>
             <li className="p-4 hover:bg-gray-700">
-              <Link to="/google-drive">Google Drive Library</Link> {/* New Navigation Item */}
+              <Link to="/google-drive">Google Drive Library</Link>
             </li>
-            {/* Add more navigation items here if needed */}
           </ul>
         </nav>
       </aside>
-      <main className="flex-1 p-8 bg-gray-50">
+      <main className="flex-1 p-8 bg-gradient-to-r from-gray-50 to-gray-200">
         {children}
       </main>
     </div>
