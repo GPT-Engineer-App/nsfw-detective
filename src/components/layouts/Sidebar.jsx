@@ -21,6 +21,9 @@ const Sidebar = ({ children }) => {
             <li className="p-4 hover:bg-gray-700">
               <Link to="/google-drive">Google Drive Library</Link>
             </li>
+            <li className="p-4 hover:bg-gray-700">
+              <Link to="/mobile-photos">Mobile Photos</Link> {/* New Tab */}
+            </li>
           </ul>
         </nav>
       </aside>
