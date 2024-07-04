@@ -11,9 +11,9 @@ const exchangeAuthorizationCode = async (code) => {
       },
       body: new URLSearchParams({
         code,
-        client_id: '329036519915-nhnl3ujtpp584uhmsvuqifu20076sqsa.apps.googleusercontent.com',
-        client_secret: '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',
-        redirect_uri: 'http://localhost:8080/oauth2callback',  // Ensuring port 8080 is used
+        client_id: '329036519915-vsbhl391ud26ve4ll5d8fee3tnmcsdng.apps.googleusercontent.com',
+        client_secret: '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',
+        redirect_uri: 'http://localhost:8080/oauth2callback',
         grant_type: 'authorization_code',
       }),
       
