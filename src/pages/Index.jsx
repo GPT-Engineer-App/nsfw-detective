@@ -4,7 +4,6 @@ import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
 import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
 import { ImageAnnotatorClient } from '@google-cloud/vision';
-import { Tooltip, Button, Spinner, Alert } from '@shadcn/ui';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -150,31 +149,40 @@ const Index = () => {
             <>
               <label className="block mb-2 text-lg font-medium">Upload your Google Photos library:</label>
               <input type="file" multiple accept="image/*" onChange={handleFileChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
-              <Tooltip content="Upload a directory of photos">
-                <Button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4">
+              <div className="relative group">
+                <button onClick={handleDirectoryUpload} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 mt-4 transition duration-300 ease-in-out transform hover:scale-105">
                   Upload Directory
-                </Button>
-              </Tooltip>
+                </button>
+                <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+                  Upload a directory of photos
+                </div>
+              </div>
               <label className="block mb-2 text-lg font-medium mt-4">Upload your Google Videos library:</label>
               <input type="file" multiple accept="video/*" onChange={handleVideoChange} className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100" />
             </>
           )}
         </section>
         <section className="mb-8">
-          <Tooltip content="Analyze uploaded photos">
-            <Button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center">
-              {loading ? <Spinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
+          <div className="relative group">
+            <button onClick={analyzePhotos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center transition duration-300 ease-in-out transform hover:scale-105">
+              {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
               Analyze Photos
-            </Button>
-          </Tooltip>
-          <Tooltip content="Analyze uploaded videos">
-            <Button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center ml-4">
-              {loading ? <Spinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+              Analyze uploaded photos
+            </div>
+          </div>
+          <div className="relative group ml-4">
+            <button onClick={analyzeVideos} className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-700 flex items-center transition duration-300 ease-in-out transform hover:scale-105">
+              {loading ? <FaSpinner className="animate-spin mr-2" /> : <FaUpload className="mr-2" />}
               Analyze Videos
-            </Button>
-          </Tooltip>
+            </button>
+            <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 hidden group-hover:block bg-gray-800 text-white text-xs rounded py-1 px-2">
+              Analyze uploaded videos
+            </div>
+          </div>
         </section>
-        {error && <Alert type="error" className="mb-4">{error}</Alert>}
+        {error && <div className="bg-red-500 text-white p-2 rounded mb-4">{error}</div>}
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
