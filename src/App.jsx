@@ -2,7 +2,8 @@ import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Index from "./pages/Index.jsx";
 import SidebarLayout from "./components/layouts/Sidebar.jsx";
 import GooglePhotos from "./pages/GooglePhotos.jsx";
-import GoogleDrive from "./pages/GoogleDrive.jsx"; // New import
+import GoogleDrive from "./pages/GoogleDrive.jsx";
+import MobilePhotos from "./pages/MobilePhotos.jsx"; // New import
 import Oauth2Callback from "./pages/Oauth2Callback.jsx";
 
 function App() {
@@ -12,7 +13,8 @@ function App() {
         <Routes>
           <Route exact path="/" element={<Index />} />
         <Route path="/google-photos" element={<GooglePhotos />} />
-        <Route path="/google-drive" element={<GoogleDrive />} /> {/* New Route */}
+        <Route path="/google-drive" element={<GoogleDrive />} />
+        <Route path="/mobile-photos" element={<MobilePhotos />} /> {/* New Route */}
         <Route path="/oauth2callback" element={<Oauth2Callback />} />
         </Routes>
       </SidebarLayout>
