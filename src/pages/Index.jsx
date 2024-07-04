@@ -175,10 +175,9 @@ const Index = () => {
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {results.map(({ photo, video, predictions }, index) => (
+            {results.map(({ photo, predictions }, index) => (
               <div key={index} className="border p-2 rounded">
                 {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
-                {video && <video src={URL.createObjectURL(video)} controls className="w-full h-auto mb-2" />}
                 <div>
                   {predictions && predictions.map((prediction, i) => (
                     <div key={i} className={`text-sm ${prediction.className === 'Porn' ? 'text-red-500' : 'text-green-500'}`}>
