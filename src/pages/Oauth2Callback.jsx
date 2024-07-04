@@ -15,6 +15,7 @@ const exchangeAuthorizationCode = async (code) => {
         redirect_uri: 'http://localhost:5173/oauth2callback',
         grant_type: 'authorization_code',
       }),
+      mode: 'no-cors',
     });
 
     if (!response.ok) {

@@ -16,6 +16,7 @@ const exchangeAuthorizationCode = async (code) => {
         redirect_uri: 'http://localhost:5173/oauth2callback',
         grant_type: 'authorization_code',
       }),
+      mode: 'no-cors',
     });
 
     if (!response.ok) {
@@ -56,20 +57,20 @@ const GoogleDrive = () => {
   };
 
   const handleLoginSuccess = async (response) => {
-    console.log('Login Success:', response);
-    try {
-      if (!response.code) {
-        throw new Error('Authorization code not found in response');
-      }
-      const tokens = await exchangeAuthorizationCode(response.code);
-      console.log('Tokens:', tokens);
-      setIsLoggedIn(true);
-      fetchDriveFiles(tokens.access_token);
-    } catch (error) {
-      console.error('Error exchanging authorization code:', error);
-      setError('Failed to exchange authorization code.');
+  console.log('Login Success:', response);
+  try {
+    if (!response.code) {
+      throw new Error('Authorization code not found in response');
     }
-  };
+    const tokens = await exchangeAuthorizationCode(response.code);
+    console.log('Tokens:', tokens);
+    setIsLoggedIn(true);
+    fetchDriveFiles(tokens.access_token);
+  } catch (error) {
+    console.error('Error exchanging authorization code:', error);
+    setError('Failed to exchange authorization code.');
+  }
+};
 
   const handleLoginFailure = (response) => {
     console.log('Login Failed:', response);
