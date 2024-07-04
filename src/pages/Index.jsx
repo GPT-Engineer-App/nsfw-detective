@@ -2,8 +2,7 @@ import React, { useState } from 'react';
 import { FaUpload, FaSpinner } from 'react-icons/fa';
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 import { fileOpen } from 'browser-fs-access';
-import { VideoIntelligenceServiceClient } from '@google-cloud/video-intelligence';
-import { ImageAnnotatorClient } from '@google-cloud/vision';
+import * as nsfwjs from 'nsfwjs';
 
 const Index = () => {
   const [photos, setPhotos] = useState([]);
@@ -39,12 +38,13 @@ const Index = () => {
     setLoading(true);
     setError(null);
     try {
-      const client = new ImageAnnotatorClient();
+      const model = await nsfwjs.load();
       const results = await Promise.all(
         photos.map(async (photo) => {
-          const [result] = await client.safeSearchDetection(photo);
-          const detections = result.safeSearchAnnotation;
-          return { photo, detections };
+          const img = new Image();
+          img.src = URL.createObjectURL(photo);
+          const predictions = await model.classify(img);
+          return { photo, predictions };
         })
       );
       setResults(results);
@@ -59,19 +59,8 @@ const Index = () => {
     setLoading(true);
     setError(null);
     try {
-      const client = new VideoIntelligenceServiceClient();
-      const results = await Promise.all(
-        videos.map(async (video) => {
-          const [operation] = await client.annotateVideo({
-            inputUri: URL.createObjectURL(video),
-            features: ['EXPLICIT_CONTENT_DETECTION'],
-          });
-          const [operationResult] = await operation.promise();
-          const explicitContentResults = operationResult.annotationResults[0].explicitAnnotation;
-          return { video, explicitContentResults };
-        })
-      );
-      setResults(results);
+      // Placeholder for video analysis logic
+      setResults([]);
     } catch (err) {
       setError('An error occurred during the video analysis.');
     } finally {
@@ -186,19 +175,14 @@ const Index = () => {
         <section>
           <h2 className="text-2xl font-bold mb-4">Results:</h2>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {results.map(({ photo, video, detections, explicitContentResults }, index) => (
+            {results.map(({ photo, video, predictions }, index) => (
               <div key={index} className="border p-2 rounded">
                 {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
                 {video && <video src={URL.createObjectURL(video)} controls className="w-full h-auto mb-2" />}
                 <div>
-                  {detections && (
-                    <div className={`text-sm ${detections.adult >= 3 ? 'text-red-500' : 'text-green-500'}`}>
-                      Adult: {detections.adult}
-                    </div>
-                  )}
-                  {explicitContentResults && explicitContentResults.frames.map((frame, i) => (
-                    <div key={i} className={`text-sm ${frame.pornographyLikelihood >= 3 ? 'text-red-500' : 'text-green-500'}`}>
-                      Frame {i + 1}: {frame.pornographyLikelihood}
+                  {predictions && predictions.map((prediction, i) => (
+                    <div key={i} className={`text-sm ${prediction.className === 'Porn' ? 'text-red-500' : 'text-green-500'}`}>
+                      {prediction.className}: {Math.round(prediction.probability * 100)}%
                     </div>
                   ))}
                 </div>

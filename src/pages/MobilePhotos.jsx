@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { FaUpload, FaSpinner } from 'react-icons/fa';
 import { fileOpen } from 'browser-fs-access';
-import { ImageAnnotatorClient } from '@google-cloud/vision';
+import * as nsfwjs from 'nsfwjs';
 
 const MobilePhotos = () => {
   const [photos, setPhotos] = useState([]);
@@ -31,12 +31,13 @@ const MobilePhotos = () => {
     setLoading(true);
     setError(null);
     try {
-      const client = new ImageAnnotatorClient();
+      const model = await nsfwjs.load();
       const results = await Promise.all(
         photos.map(async (photo) => {
-          const [result] = await client.safeSearchDetection(photo);
-          const detections = result.safeSearchAnnotation;
-          return { photo, detections };
+          const img = new Image();
+          img.src = URL.createObjectURL(photo);
+          const predictions = await model.classify(img);
+          return { photo, predictions };
         })
       );
       setResults(results);
@@ -69,15 +70,15 @@ const MobilePhotos = () => {
       <section>
         <h2 className="text-2xl font-bold mb-4">Results:</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {results.map(({ photo, detections }, index) => (
+          {results.map(({ photo, predictions }, index) => (
             <div key={index} className="border p-2 rounded">
               {photo && <img src={URL.createObjectURL(photo)} alt={`Photo ${index + 1}`} className="w-full h-auto mb-2" />}
               <div>
-                {detections && (
-                  <div className={`text-sm ${detections.adult >= 3 ? 'text-red-500' : 'text-green-500'}`}>
-                    Adult: {detections.adult}
+                {predictions && predictions.map((prediction, i) => (
+                  <div key={i} className={`text-sm ${prediction.className === 'Porn' ? 'text-red-500' : 'text-green-500'}`}>
+                    {prediction.className}: {Math.round(prediction.probability * 100)}%
                   </div>
-                )}
+                ))}
               </div>
             </div>
           ))}
